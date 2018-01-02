@@ -9,7 +9,7 @@ target/
 .settings
 .springBeans
 .plugins
-.mvn
+.mvn\wrapper
 
 ### IntelliJ IDEA ###
 .idea

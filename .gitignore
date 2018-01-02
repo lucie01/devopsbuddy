@@ -8,8 +8,7 @@ target/
 .project
 .settings
 .springBeans
-.plugins
-.mvn\wrapper
+
 
 ### IntelliJ IDEA ###
 .idea
@@ -18,6 +17,9 @@ target/
 *.ipr
 target
 .devopsbuddy.iml
+.plugins
+.mvn\wrapper
+.metadata
 
 ### NetBeans ###
 nbproject/private/

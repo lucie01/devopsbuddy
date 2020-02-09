@@ -8,6 +8,22 @@
 
     <div class="container">
         <div class="row">
+            <div class="col-md-6 col-md-offset-3 text-center">
+                <div class="alert alert-danger alert-dismissible" th:if="${param.error}" role="alert">
+                    <button type="submit" class="close" data-disimiss="alert" aria-label="Close">
+                        <span aria-hidden="true">X</span>
+                    </button>
+                    <p th:text="#{login.error.message}"/>
+                </div>
+                <div class="alert alert-success alert-dismissible" th:if="${param.logout}" role="alert">
+                    <button type="submit" class="close" data-disimiss="alert" aria-label="Close">
+                        <span aria-hidden="true">X</span>
+                    </button>
+                    <p th:text="#{login.logout.success}"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="well">
                     <div class="text-center">
@@ -17,8 +33,8 @@
                     <div class="text-left">
                         <form id="loginForm" th:action="@{/login}" method="post">
                             <div class="form-group">
-                                <label for="userName" th:text="#{login.username.text}"></label>
-                                <input type="text" id="userName" name="userName" class="form-control"/>
+                                <label for="username" th:text="#{login.username.text}"></label>
+                                <input type="text" id="username" name="username" class="form-control"/>
                             </div>
                             <div class="form-group">
                                 <label for="password" th:text="#{login.password.text}"></label>

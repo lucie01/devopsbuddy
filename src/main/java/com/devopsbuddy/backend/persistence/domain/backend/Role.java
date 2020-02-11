@@ -1,6 +1,8 @@
 package com.devopsbuddy.backend.persistence.domain.backend;
 
+import com.devopsbuddy.enums.RolesEnum;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Slf4j
 public class Role implements Serializable {
 
     /**
@@ -21,6 +24,12 @@ public class Role implements Serializable {
     @Id
     private int id;
     private String name;
+
+    public Role(RolesEnum rolesEnum){
+        log.trace("Creating a new Role by RolesEnum with id={} and name={}", rolesEnum.getId(), rolesEnum.getRoleName());
+        this.id = rolesEnum.getId();
+        this.name = rolesEnum.getRoleName();
+    }
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserRole> userRoles = new HashSet<>();

@@ -1,6 +1,8 @@
 package com.devopsbuddy.backend.persistence.domain.backend;
 
+import com.devopsbuddy.enums.PlansEnum;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @Entity
+@Slf4j
 public class Plan implements Serializable {
 
     /**
@@ -18,6 +21,12 @@ public class Plan implements Serializable {
     @Id
     private int id;
     private String name;
+
+    public Plan(PlansEnum plansEnum) {
+        log.trace("Creating a Plan by PlansEnum with id={} and name={}", plansEnum.getId(), plansEnum.getPlanName());
+        this.id = plansEnum.getId();
+        this.name = plansEnum.getPlanName();
+    }
     /*
     @Override
     public int hashCode() {

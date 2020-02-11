@@ -7,9 +7,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @Entity
 public class Plan implements Serializable {
 
@@ -19,6 +17,22 @@ public class Plan implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private int id;
-    @EqualsAndHashCode.Exclude private String name;
+    private String name;
+    /*
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+
+        Plan plan = (Plan) obj;
+        return id == plan.id;
+    }
+
+     */
 
 }

@@ -1,4 +1,4 @@
-package devopsbuddy;
+package com.devopsbuddy;
 
 import com.devopsbuddy.config.i18n.I18NConfig;
 import com.devopsbuddy.web.i18n.I18NService;

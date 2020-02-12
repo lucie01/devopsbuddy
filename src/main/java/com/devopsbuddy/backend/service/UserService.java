@@ -12,6 +12,7 @@ import com.devopsbuddy.enums.RolesEnum;
 import com.devopsbuddy.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +31,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
+
     @Transactional
     public User createUser(User user, PlansEnum plansEnum, RolesEnum rolesEnum){
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+
         Plan plan = new Plan(plansEnum);
         if (!planRepository.existsById(plansEnum.getId())) {
            plan = planRepository.save(plan);

@@ -44,7 +44,6 @@ public class UserService {
            plan = planRepository.save(plan);
         }
 
-
         Set<UserRole> userRoles = new HashSet<>();
         UserRole userRole = new UserRole(user, new Role(rolesEnum));
         userRoles.add(userRole);
@@ -61,8 +60,22 @@ public class UserService {
 
         user.getUserRoles().addAll(userRoles);
         user.setUserRoles(userRoles);
-        user = userRepository.save(user);
 
+        User userExistsVerification = userRepository.findByUsername(user.getUsername());
+        boolean exists = false;
+        try {
+            exists = userExistsVerification.isEnabled();
+            log.debug("User {}  exists", user.getUsername());
+        } catch (NullPointerException e) {
+            log.debug("User {}  don't exist", user.getUsername());
+        }
+
+
+        if (!exists) {
+            log.debug("Creating user with id {}", user.getId());
+            user = userRepository.save(user);
+            log.debug("Created user with id {} successfully", user.getId());
+        }
         return user;
     }
 }

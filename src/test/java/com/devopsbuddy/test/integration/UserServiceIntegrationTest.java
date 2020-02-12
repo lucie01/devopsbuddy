@@ -9,7 +9,9 @@ import com.devopsbuddy.enums.PlansEnum;
 import com.devopsbuddy.enums.RolesEnum;
 import com.devopsbuddy.utils.UserUtils;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,10 +27,16 @@ public class UserServiceIntegrationTest {
     @Autowired
     private UserService userService;
 
+    @Rule
+    public TestName testName = new TestName();
+
     @Test
     public void testCreateNewUser() {
 
-        User basicUser = UserUtils.createBasicUser();
+        String username = testName.getClass().getName() + testName.getMethodName();
+        String email = testName.getClass().getName() + testName.getMethodName() + "@gmail.com";
+
+        User basicUser = UserUtils.createBasicUser(username, email);
         User user = userService.createUser(basicUser, PlansEnum.BASIC, RolesEnum.BASIC);
 
         Assert.assertNotNull(user);

@@ -1,5 +1,6 @@
 package com.devopsbuddy.config;
 
+import com.devopsbuddy.backend.service.UserSecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,9 @@ import java.util.List;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserSecurityService userSecurityService;
 
     @Autowired
     private Environment env;
@@ -58,17 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
         authenticationManagerBuilder
-                .inMemoryAuthentication()
-                .withUser("user").password("{noop}password").roles("USER")
-                .and()
-                .withUser("admin").password("{noop}password").roles("USER", "ADMIN");
-        /*String exist = authenticationManagerBuilder.
-                inMemoryAuthentication().
-                getUserDetailsService().
-                userExists("user") ? "Sim" : "Não";
-        log.info("User exists {}", exist);
-        */
-        log.info("User isConfigured {}", authenticationManagerBuilder.isConfigured() ? "Sim" : "Não");
-        //log.info("User pass {}", authenticationManagerBuilder.getDefaultUserDetailsService().loadUserByUsername("user").getPassword());
+                .userDetailsService(userSecurityService);
     }
 }

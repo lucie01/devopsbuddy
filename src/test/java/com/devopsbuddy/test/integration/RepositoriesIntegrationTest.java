@@ -10,7 +10,8 @@ import com.devopsbuddy.backend.persistence.repositories.RoleRepository;
 import com.devopsbuddy.backend.persistence.repositories.UserRepository;
 import com.devopsbuddy.enums.PlansEnum;
 import com.devopsbuddy.enums.RolesEnum;
-import com.devopsbuddy.utils.UsersUtils;
+import com.devopsbuddy.utils.UserUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = DevopsbuddyApplication.class)
 public class RepositoriesIntegrationTest {
@@ -64,38 +66,21 @@ public class RepositoriesIntegrationTest {
     @Test
     public void testCreateNewRole() throws Exception {
         Role role = createBasicRole(RolesEnum.BASIC);
-        Role newRole = roleRepository.save(role);
+        Role newRole = new Role();
+        if (!roleRepository.existsById(role.getId())) {
+            log.debug("Creating role with id {}", role.getId());
+            newRole = roleRepository.save(role);
+            log.debug("Created role with id {} successfully", newRole.getId());
+        }
         Optional<Role> retrievedRole = roleRepository.findById(newRole.getId());
         Assert.assertNotNull(retrievedRole);
     }
 
     @Test
     public void testCreateNewUser() {
-        Plan basicPlan = createBasicPlan();
-        planRepository.save(basicPlan);
+        User basicUser = createUser();
 
-        User basicUser = UsersUtils.createBasicUser();
-        basicUser.setPlan(basicPlan);
-
-        Role basicRole = createBasicRole();
-        Set<UserRole> userRoles = new HashSet<>();
-        UserRole userRole = new UserRole(basicUser, basicRole);
-        //userRole.setUser(basicUser);
-        //userRole.setRole(basicRole);
-        userRoles.add(userRole);
-
-        //basicUser.setUserRoles(userRoles);
-        basicUser.getUserRoles().addAll(userRoles);
-
-        userRoles.forEach( ur -> {
-            roleRepository.save(ur.getRole());
-        });
-
-        basicUser.setUserRoles(userRoles);
-
-        User newUser = userRepository.save(basicUser);
-
-        Optional<User> newlyCreatedUser = userRepository.findById(newUser.getId());
+        Optional<User> newlyCreatedUser = userRepository.findById(basicUser.getId());
         Assert.assertNotNull(newlyCreatedUser);
         Assert.assertTrue(newlyCreatedUser.get().getId() != 0);
         Assert.assertNotNull(newlyCreatedUser.get().getPlan());
@@ -106,6 +91,13 @@ public class RepositoriesIntegrationTest {
             Assert.assertNotNull(ur.getRole());
             Assert.assertNotNull(ur.getRole().getId());
         });
+
+    }
+
+    @Test
+    public void testDeleteUser() throws Exception{
+        User basicUser = createUser();
+        userRepository.deleteById(basicUser.getId());
 
     }
 
@@ -129,5 +121,33 @@ public class RepositoriesIntegrationTest {
 
     private Role createBasicRole(RolesEnum rolesEnum){
         return new Role(rolesEnum);
+    }
+
+    private User createUser(){
+        Plan basicPlan = new Plan(PlansEnum.BASIC);
+        if (!planRepository.existsById(PlansEnum.BASIC.getId())) {
+            basicPlan = planRepository.save(basicPlan);
+        }
+        User basicUser = UserUtils.createBasicUser();
+        basicUser.setPlan(basicPlan);
+
+        Role basicRole = new Role(RolesEnum.BASIC);
+        if (!roleRepository.existsById(basicRole.getId())) {
+            basicRole = roleRepository.save(basicRole);
+        }
+
+        Set<UserRole> userRoles = new HashSet<>();
+        UserRole userRole = new UserRole(basicUser, basicRole);
+        userRoles.add(userRole);
+
+        basicUser.getUserRoles().addAll(userRoles);
+        basicUser.setUserRoles(userRoles); //TODO: necessário?
+
+        if (!userRepository.existsById(basicUser.getId())) {
+            log.debug("Creating user with id {}", basicUser.getId());
+            basicUser = userRepository.save(basicUser);
+            log.debug("Created user with id {} successfully", basicUser.getId());
+        }
+        return basicUser;
     }
 }

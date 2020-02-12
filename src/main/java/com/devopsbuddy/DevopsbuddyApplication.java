@@ -6,14 +6,14 @@ import com.devopsbuddy.backend.persistence.domain.backend.UserRole;
 import com.devopsbuddy.backend.service.UserService;
 import com.devopsbuddy.enums.PlansEnum;
 import com.devopsbuddy.enums.RolesEnum;
-import com.devopsbuddy.utils.UsersUtils;
+import com.devopsbuddy.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,13 +32,11 @@ public class DevopsbuddyApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		User user = UsersUtils.createBasicUser();
-		Set<UserRole> userRoles = new HashSet<>();
-		Role role = new Role(RolesEnum.BASIC);
-		UserRole userRole = new UserRole(user, role);
-		userRoles.add(userRole);
-		log.debug("Creating user with username {}", user.getUsername());
-		user = userService.createUser(user, PlansEnum.BASIC, userRoles);
-		log.debug("User {} created successfully!", user.getUsername());
+		User basicUser = UserUtils.createBasicUser();
+
+		log.debug("Creating user with username {}", basicUser.getUsername());
+
+		User user = userService.createUser(basicUser, PlansEnum.PRO, RolesEnum.PRO);
+		log.debug("User {} created successfully!", basicUser.getUsername());
 	}
 }

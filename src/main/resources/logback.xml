@@ -23,10 +23,10 @@
     <logger name="uk.co.jemos.podam" level="debug" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
-    <logger name="org.springframework" level="trace" additivity="false">
+    <logger name="org.springframework" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
-    <logger name="org.springframework.security" level="trace" additivity="false">
+    <logger name="org.springframework.security" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
     <logger name="org.hibernate" level="warn" additivity="false">

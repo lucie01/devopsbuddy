@@ -1,14 +1,13 @@
 package com.devopsbuddy.test.integration;
 
 import com.devopsbuddy.DevopsbuddyApplication;
-import com.devopsbuddy.backend.persistence.domain.backend.Plan;
 import com.devopsbuddy.backend.persistence.domain.backend.Role;
 import com.devopsbuddy.backend.persistence.domain.backend.User;
 import com.devopsbuddy.backend.persistence.domain.backend.UserRole;
 import com.devopsbuddy.backend.service.UserService;
 import com.devopsbuddy.enums.PlansEnum;
 import com.devopsbuddy.enums.RolesEnum;
-import com.devopsbuddy.utils.UsersUtils;
+import com.devopsbuddy.utils.UserUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -30,12 +28,8 @@ public class UserServiceIntegrationTest {
     @Test
     public void testCreateNewUser() {
 
-        User basicUser = UsersUtils.createBasicUser();
-        Set<UserRole> userRoles = new HashSet<>();
-        UserRole userRole = new UserRole(basicUser, new Role(RolesEnum.BASIC));
-        userRoles.add(userRole);
-
-        User user = userService.createUser(basicUser, PlansEnum.BASIC, userRoles);
+        User basicUser = UserUtils.createBasicUser();
+        User user = userService.createUser(basicUser, PlansEnum.BASIC, RolesEnum.BASIC);
 
         Assert.assertNotNull(user);
         Assert.assertNotNull(user.getId());

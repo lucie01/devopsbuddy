@@ -13,6 +13,6 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
 
     boolean existsByToken(String token);
 
-    @Query("select ptr from PasswordResetToken ptr inner join ptr.user u where ptr.user = ?1")
+    @Query("select ptr from User u join u.passwordResetTokens ptr where u.id = ?1")
     Set<PasswordResetToken> findAllByUserId(long userId);
 }

@@ -1,10 +1,7 @@
 package com.devopsbuddy.test.integration;
 
 import com.devopsbuddy.DevopsbuddyApplication;
-import com.devopsbuddy.backend.persistence.domain.backend.Plan;
-import com.devopsbuddy.backend.persistence.domain.backend.Role;
-import com.devopsbuddy.backend.persistence.domain.backend.User;
-import com.devopsbuddy.backend.persistence.domain.backend.UserRole;
+import com.devopsbuddy.backend.persistence.domain.backend.*;
 import com.devopsbuddy.backend.persistence.repositories.PasswordResetTokenRepository;
 import com.devopsbuddy.backend.persistence.repositories.PlanRepository;
 import com.devopsbuddy.backend.persistence.repositories.RoleRepository;
@@ -13,12 +10,14 @@ import com.devopsbuddy.enums.PlansEnum;
 import com.devopsbuddy.enums.RolesEnum;
 import com.devopsbuddy.utils.UserUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -93,4 +92,12 @@ public abstract class AbstractIntegrationTest {
         return createUser(testName.getMethodName(), testName.getMethodName() + "@gmail.com");
     }
 
+    protected PasswordResetToken createPasswordResetToken(String token, User user, LocalDateTime now, int expirationTimeMinutes) {
+
+        PasswordResetToken passwordResetToken = new PasswordResetToken(token, user, now, expirationTimeMinutes);
+        passwordResetTokenRepository.save(passwordResetToken);
+        Assert.assertNotNull(passwordResetToken.getId());
+        return passwordResetToken;
+
+    }
 }

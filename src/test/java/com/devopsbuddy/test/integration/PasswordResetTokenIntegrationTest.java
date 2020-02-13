@@ -62,7 +62,7 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
         LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
         String token = UUID.randomUUID().toString();
 
-        createPasswordResetToken(token, user, now);
+        createPasswordResetToken(token, user, now, expirationTimeMinutes);
 
         PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByToken(token);
         Assert.assertNotNull(passwordResetToken);
@@ -79,7 +79,7 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
         LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
         String token = UUID.randomUUID().toString();
 
-        PasswordResetToken passwordResetToken = createPasswordResetToken(token, user, now);
+        PasswordResetToken passwordResetToken = createPasswordResetToken(token, user, now, expirationTimeMinutes);
         long tokenId = passwordResetToken.getId();
         Assert.assertNotNull(tokenId);
         passwordResetTokenRepository.deleteById(tokenId);
@@ -97,7 +97,7 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
         LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
         String token = UUID.randomUUID().toString();
 
-        PasswordResetToken passwordResetToken = createPasswordResetToken(token, user, now);
+        PasswordResetToken passwordResetToken = createPasswordResetToken(token, user, now, expirationTimeMinutes);
         Assert.assertNotNull(passwordResetToken);
         userRepository.deleteById(user.getId());
         log.warn("user.getId():: {}", user.getId());
@@ -116,9 +116,9 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
         String token3 = UUID.randomUUID().toString();
 
         Set<PasswordResetToken> passwordResetTokens = new HashSet<>();
-        passwordResetTokens.add(createPasswordResetToken(token1, user,now));
-        passwordResetTokens.add(createPasswordResetToken(token2, user,now));
-        passwordResetTokens.add(createPasswordResetToken(token3, user,now));
+        passwordResetTokens.add(createPasswordResetToken(token1, user,now, expirationTimeMinutes));
+        passwordResetTokens.add(createPasswordResetToken(token2, user,now, expirationTimeMinutes));
+        passwordResetTokens.add(createPasswordResetToken(token3, user,now, expirationTimeMinutes));
 
         passwordResetTokenRepository.saveAll(passwordResetTokens);
 
@@ -133,12 +133,4 @@ public class PasswordResetTokenIntegrationTest extends AbstractIntegrationTest {
 
     }
 
-    private PasswordResetToken createPasswordResetToken(String token, User user, LocalDateTime now) {
-
-        PasswordResetToken passwordResetToken = new PasswordResetToken(token, user, now, expirationTimeMinutes);
-        passwordResetTokenRepository.save(passwordResetToken);
-        Assert.assertNotNull(passwordResetToken.getId());
-        return passwordResetToken;
-
-    }
 }

@@ -22,10 +22,7 @@ import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = DevopsbuddyApplication.class)
-public class UserServiceIntegrationTest {
-
-    @Autowired
-    private UserService userService;
+public class UserServiceIntegrationTest extends AbstractServiceIntegrationTest{
 
     @Rule
     public TestName testName = new TestName();
@@ -33,11 +30,7 @@ public class UserServiceIntegrationTest {
     @Test
     public void testCreateNewUser() {
 
-        String username = testName.getClass().getName() + testName.getMethodName();
-        String email = testName.getClass().getName() + testName.getMethodName() + "@gmail.com";
-
-        User basicUser = UserUtils.createBasicUser(username, email);
-        User user = userService.createUser(basicUser, PlansEnum.BASIC, RolesEnum.BASIC);
+        User user = createUser(testName);
 
         Assert.assertNotNull(user);
         Assert.assertNotNull(user.getId());

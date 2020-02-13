@@ -29,7 +29,7 @@ import java.util.Set;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = DevopsbuddyApplication.class)
-public class UserIntegrationTest extends AbstractIntegrationTest {
+public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
 
     @Rule
     public TestName testName = new TestName();
@@ -89,12 +89,20 @@ public class UserIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testDeleteUser() throws Exception{
+    public void testDeleteUser() throws Exception {
         String username = testName.getMethodName();
         String email = testName.getMethodName() + "@gmail.com";
         User basicUser = createUser(username, email);
         userRepository.deleteById(basicUser.getId());
+    }
 
+    public void testGetUserByEmail() throws Exception {
+        User basicUser = createUser(testName);
+
+        User newUser = userRepository.findByEmail(basicUser.getEmail());
+        Assert.assertNotNull(newUser);
+        Assert.assertNotNull(newUser.getId());
+        Assert.assertNotNull(newUser.getEmail());
     }
 
 }

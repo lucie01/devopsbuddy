@@ -1,6 +1,5 @@
 package com.devopsbuddy.config.i18n;
 
-import com.devopsbuddy.web.i18n.I18NService;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

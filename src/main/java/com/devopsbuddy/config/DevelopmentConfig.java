@@ -2,6 +2,7 @@ package com.devopsbuddy.config;
 
 import com.devopsbuddy.backend.service.EmailService;
 import com.devopsbuddy.backend.service.MockEmailService;
+import com.devopsbuddy.backend.service.SmtpEmailService;
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +17,8 @@ public class DevelopmentConfig {
 
     @Bean
     public EmailService emailService(){
-        return new MockEmailService();
+        //return new MockEmailService();
+        return new SmtpEmailService();
     }
 
     @Bean
